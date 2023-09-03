@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://telegram.org/js/telegram-web-app.js?1"></script>
+    <title>Document</title>
+</head>
+<body>
+    <button id="sendMessageButton">Send Message</button>
+    <div id="btn_status"></div>
+
+    <script type="text/javascript">
+        
+        const DemoApp = {
+        initData: Telegram.WebApp.initData || '',
+        initDataUnsafe: Telegram.WebApp.initDataUnsafe || {},
+        MainButton: Telegram.WebApp.MainButton,
+
+        init(options) {
+            document.body.style.visibility = '';
+            Telegram.WebApp.ready();
+            Telegram.WebApp.MainButton.setParams({
+                text: 'CLOSE WEBVIEW',
+                is_visible: true
+            }).onClick(DemoApp.close);
+        },
+        expand() {
+            Telegram.WebApp.expand();
+        },
+        close() {
+            Telegram.WebApp.close();
+        },
+        toggleMainButton(el) {
+            const mainButton = Telegram.WebApp.MainButton;
+            if (mainButton.isVisible) {
+                mainButton.hide();
+                el.innerHTML = 'Show Main Button';
+            } else {
+                mainButton.show();
+                el.innerHTML = 'Hide Main Button';
+            }
+        }}
+
+        function sendMessage(msg_id, with_webview) {
+            if (!DemoApp.initDataUnsafe.query_id) {
+                alert('WebViewQueryId not defined');
+                return;
+            }
+
+            document.querySelectorAll('button').forEach((btn) => btn.disabled = true);
+
+            const btn = document.querySelector('#btn_status');
+            btn.textContent = 'Sending...';
+
+            DemoApp.apiRequest('sendMessage', {
+                msg_id: msg_id || 'hello', // Change 'hello' to the desired message
+                with_webview: !DemoApp.initDataUnsafe.receiver && with_webview ? 1 : 0
+            }, function(result) {
+                document.querySelectorAll('button').forEach((btn) => btn.disabled = false);
+
+                if (result.response) {
+                    if (result.response.ok) {
+                        btn.textContent = 'Message sent successfully!';
+                        btn.className = 'ok';
+                        btn.style.display = 'block';
+                    } else {
+                        btn.textContent = result.response.description;
+                        btn.className = 'err';
+                        btn.style.display = 'block';
+                        alert(result.response.description);
+                    }
+                } else if (result.error) {
+                    btn.textContent = result.error;
+                    btn.className = 'err';
+                    btn.style.display = 'block';
+                    alert(result.error);
+                } else {
+                    btn.textContent = 'Unknown error';
+                    btn.className = 'err';
+                    btn.style.display = 'block';
+                    alert('Unknown error');
+                }
+            });
+        }
+
+        // Add a click event listener to the button
+        document.getElementById('sendMessageButton').addEventListener('click', function() {
+            sendMessage('hello', false); // Change 'hello' to the desired message
+        });
+    </script>
+</body>
+</html>
