@@ -7,6 +7,7 @@
     <title>Document</title>
 </head>
 <body>
+    <pre><code id="webview_data"></code></pre>
     <button id="sendMessageButton">Send Message</button>
     <div id="btn_status"></div>
 
@@ -42,6 +43,17 @@
             }
         }}
 
+        const DemoAppInitData = {
+        init() {
+            DemoApp.init();
+            Telegram.WebApp.onEvent('themeChanged', function() {
+                document.getElementById('theme_data').innerHTML = JSON.stringify(Telegram.WebApp.themeParams, null, 2);
+            });
+            document.getElementById('webview_data').innerHTML = JSON.stringify(DemoApp.initDataUnsafe, null, 2);
+            document.getElementById('theme_data').innerHTML = JSON.stringify(Telegram.WebApp.themeParams, null, 2);
+            DemoApp.checkInitData();
+        }
+    };
         function sendMessage(msg_id, with_webview) {
             if (!DemoApp.initDataUnsafe.query_id) {
                 alert('WebViewQueryId not defined');
@@ -83,7 +95,7 @@
                 }
             });
         }
-
+        document.getElementById('webview_data').innerHTML = JSON.stringify(DemoApp.initDataUnsafe, null, 2);
         // Add a click event listener to the button
         document.getElementById('sendMessageButton').addEventListener('click', function() {
             sendMessage('hello', false); // Change 'hello' to the desired message
