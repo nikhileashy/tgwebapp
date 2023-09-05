@@ -8,6 +8,7 @@
 </head>
 <body>
     <pre><code id="webview_data"></code></pre>
+    <button id="closeAppButton">Close App</button>
 
     <script type="text/javascript">
         const DemoAppInitData = {
@@ -15,8 +16,14 @@
                 document.getElementById('webview_data').innerHTML = JSON.stringify(Telegram.WebApp.initDataUnsafe, null, 2);
             }
         };
-        
+
+        function closeApp() {
+            Telegram.WebApp.close();
+        }
+
         DemoAppInitData.init();
+
+        document.getElementById('closeAppButton').addEventListener('click', closeApp);
     </script>
 </body>
 </html>
