@@ -7,14 +7,17 @@
     <title>WebView Data</title>
 </head>
 <body>
-    <p>User ID: <span id="userId"></span></p>
+    <p><strong>User ID:</strong> <span id="userId"></span></p>
     <button id="closeAppButton">Close App</button>
 
     <script type="text/javascript">
         const DemoAppInitData = {
             init() {
-                const jsonData = JSON.parse(Telegram.WebApp.initData);
-                document.getElementById('userId').textContent = jsonData.user.id;
+                const initDataUnsafe = Telegram.WebApp.initDataUnsafe;
+                if (initDataUnsafe && initDataUnsafe.user && initDataUnsafe.user.id) {
+                    const userId = initDataUnsafe.user.id;
+                    document.getElementById('userId').textContent = userId;
+                }
             }
         };
 
