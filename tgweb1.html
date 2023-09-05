@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://telegram.org/js/telegram-web-app.js?1"></script>
+    <title>WebView Data</title>
+</head>
+<body>
+    <pre><code id="webview_data"></code></pre>
+
+    <script type="text/javascript">
+        const DemoAppInitData = {
+            init() {
+                document.getElementById('webview_data').innerHTML = JSON.stringify(Telegram.WebApp.initDataUnsafe, null, 2);
+            }
+        };
+        
+        DemoAppInitData.init();
+    </script>
+</body>
+</html>
